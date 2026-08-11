@@ -21,18 +21,7 @@ export function printChecklistPDF(r) {
   }, 1000);
 }
 
-export function printLimpezaPDF(r) {
-  const nomeArquivo = ["Historico_de_Limpeza", r.placa || "", formatDate(r.data).replace(/\//g, "-")]
-    .filter(Boolean)
-    .join("_");
-  document.title = nomeArquivo;
-  window.print();
-  setTimeout(() => {
-    document.title = ORIGINAL_TITLE;
-  }, 1000);
-}
-
-export default function DetailModal({ record, type, isConfirmation, onClose }) {
+export default function DetailModal({ record, isConfirmation, onClose }) {
   useEffect(() => {
     function onOverlayClick(e) {
       if (e.target.id === "detail-overlay") onClose();
@@ -44,9 +33,7 @@ export default function DetailModal({ record, type, isConfirmation, onClose }) {
 
   if (!record) return null;
   const r = record;
-  const isChecklist = type === "checklist";
-  const kmRodado =
-    isChecklist && r.kmVolta && r.kmSaida ? Number(r.kmVolta) - Number(r.kmSaida) : null;
+  const kmRodado = r.kmVolta && r.kmSaida ? Number(r.kmVolta) - Number(r.kmSaida) : null;
 
   return (
     <div className="detail-overlay show" id="detail-overlay">
@@ -67,97 +54,70 @@ export default function DetailModal({ record, type, isConfirmation, onClose }) {
               marginBottom: 12,
             }}
           >
-            {isChecklist ? "Checklist salvo" : "Limpeza salva"} — confira o resumo abaixo
+            Checklist salvo — confira o resumo abaixo
           </div>
         )}
 
         <div className="detail-h">
-          {isChecklist ? "" : "Limpeza interna — "}
           {r.placa}
           {r.modelo ? " — " + r.modelo : ""}
         </div>
 
-        {isChecklist ? (
-          <div className="detail-grid">
-            <div>
-              <span>Data saída</span>
-              {formatDate(r.dataSaida)} {r.horaSaida || ""}
-            </div>
-            <div>
-              <span>Data volta</span>
-              {r.dataVolta ? formatDate(r.dataVolta) + " " + (r.horaVolta || "") : "-"}
-            </div>
-            <div>
-              <span>Responsável</span>
-              {r.responsavel || "-"}
-            </div>
-            <div>
-              <span>Motorista</span>
-              {r.motorista || "-"}
-            </div>
-            <div>
-              <span>KM saída</span>
-              {r.kmSaida || "-"}
-            </div>
-            <div>
-              <span>KM volta</span>
-              {r.kmVolta || "-"}
-            </div>
-            <div>
-              <span>KM rodados</span>
-              {kmRodado ?? "-"}
-            </div>
-            <div>
-              <span>Destino</span>
-              {r.destino || "-"}
-            </div>
+        <div className="detail-grid">
+          <div>
+            <span>Data saída</span>
+            {formatDate(r.dataSaida)} {r.horaSaida || ""}
           </div>
-        ) : (
-          <div className="detail-grid">
-            <div>
-              <span>Data</span>
-              {formatDate(r.data)}
-            </div>
-            <div>
-              <span>Responsável</span>
-              {r.responsavel || "-"}
-            </div>
+          <div>
+            <span>Data volta</span>
+            {r.dataVolta ? formatDate(r.dataVolta) + " " + (r.horaVolta || "") : "-"}
+          </div>
+          <div>
+            <span>Responsável</span>
+            {r.responsavel || "-"}
+          </div>
+          <div>
+            <span>Motorista</span>
+            {r.motorista || "-"}
+          </div>
+          <div>
+            <span>KM saída</span>
+            {r.kmSaida || "-"}
+          </div>
+          <div>
+            <span>KM volta</span>
+            {r.kmVolta || "-"}
+          </div>
+          <div>
+            <span>KM rodados</span>
+            {kmRodado ?? "-"}
+          </div>
+          <div>
+            <span>Destino</span>
+            {r.destino || "-"}
+          </div>
+        </div>
+
+        {r.obsLimpeza && (
+          <div style={{ marginTop: 14 }}>
+            <span
+              style={{
+                fontSize: 11,
+                color: "var(--ink-soft)",
+                textTransform: "uppercase",
+                fontWeight: 600,
+              }}
+            >
+              Limpeza interna
+            </span>
+            <div>{r.obsLimpeza}</div>
           </div>
         )}
 
-        {isChecklist ? (
-          <div className="items-print-wrap">
-            <table className="itemtable">
-              <tbody>
-                {r.items.slice(0, Math.ceil(r.items.length / 2)).map((i) => (
-                  <tr key={i.name}>
-                    <td>{i.name}</td>
-                    <td>
-                      <span className={"stbadge " + (i.status || "vazio")}>{i.status || "-"}</span>
-                    </td>
-                    <td style={{ color: "var(--ink-soft)", fontSize: 12 }}>{i.obs || ""}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <table className="itemtable">
-              <tbody>
-                {r.items.slice(Math.ceil(r.items.length / 2)).map((i) => (
-                  <tr key={i.name}>
-                    <td>{i.name}</td>
-                    <td>
-                      <span className={"stbadge " + (i.status || "vazio")}>{i.status || "-"}</span>
-                    </td>
-                    <td style={{ color: "var(--ink-soft)", fontSize: 12 }}>{i.obs || ""}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
+        <div className="items-print-wrap">
           <table className="itemtable">
             <tbody>
-              {r.items.map((i) => (
+              {r.items.slice(0, Math.ceil(r.items.length / 2)).map((i) => (
                 <tr key={i.name}>
                   <td>{i.name}</td>
                   <td>
@@ -168,9 +128,22 @@ export default function DetailModal({ record, type, isConfirmation, onClose }) {
               ))}
             </tbody>
           </table>
-        )}
+          <table className="itemtable">
+            <tbody>
+              {r.items.slice(Math.ceil(r.items.length / 2)).map((i) => (
+                <tr key={i.name}>
+                  <td>{i.name}</td>
+                  <td>
+                    <span className={"stbadge " + (i.status || "vazio")}>{i.status || "-"}</span>
+                  </td>
+                  <td style={{ color: "var(--ink-soft)", fontSize: 12 }}>{i.obs || ""}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        {isChecklist && r.assinatura && (
+        {r.assinatura && (
           <div style={{ marginTop: 14 }}>
             <span
               style={{
@@ -193,11 +166,7 @@ export default function DetailModal({ record, type, isConfirmation, onClose }) {
         )}
 
         <div className="detail-actions">
-          <button
-            className="btn secondary small"
-            type="button"
-            onClick={() => (isChecklist ? printChecklistPDF(r) : printLimpezaPDF(r))}
-          >
+          <button className="btn secondary small" type="button" onClick={() => printChecklistPDF(r)}>
             Baixar / imprimir PDF
           </button>
         </div>

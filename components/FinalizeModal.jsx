@@ -7,6 +7,7 @@ export default function FinalizeModal({ record, onClose, onConfirm, showToast })
   const [dataVolta, setDataVolta] = useState(todayISO());
   const [horaVolta, setHoraVolta] = useState(nowTime());
   const [kmVolta, setKmVolta] = useState("");
+  const [obsLimpeza, setObsLimpeza] = useState("");
 
   if (!record) return null;
 
@@ -16,7 +17,13 @@ export default function FinalizeModal({ record, onClose, onConfirm, showToast })
       return;
     }
     try {
-      await onConfirm(record.id, { dataVolta, horaVolta, kmVolta, status: "finalizado" });
+      await onConfirm(record.id, {
+        dataVolta,
+        horaVolta,
+        kmVolta,
+        obsLimpeza: obsLimpeza.trim(),
+        status: "finalizado",
+      });
       showToast("Retorno finalizado com sucesso");
       onClose();
     } catch (e) {
@@ -50,6 +57,14 @@ export default function FinalizeModal({ record, onClose, onConfirm, showToast })
             value={kmVolta}
             onChange={(e) => setKmVolta(e.target.value)}
             placeholder="0"
+          />
+        </div>
+        <div className="field">
+          <label>Limpeza interna</label>
+          <textarea
+            value={obsLimpeza}
+            onChange={(e) => setObsLimpeza(e.target.value)}
+            placeholder="Descreva se algo ficou no veículo (copo, lixo, etc.) — opcional"
           />
         </div>
         <button className="btn" style={{ marginTop: 14 }} type="button" onClick={handleSave}>

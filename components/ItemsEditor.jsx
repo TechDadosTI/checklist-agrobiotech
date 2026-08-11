@@ -3,7 +3,7 @@
 // items: array de nomes (strings)
 // values: objeto { [nome]: { status, obs } }
 // onChange(nome, patch) - patch é { status } ou { obs }
-// showNA: se true, mostra o botão "NA" (usado no checklist de veículo, não na limpeza)
+// showNA: se true, mostra o botão "NA"
 // obsPlaceholder: texto do campo de observação
 export default function ItemsEditor({ items, values, onChange, showNA = true, obsPlaceholder }) {
   return (

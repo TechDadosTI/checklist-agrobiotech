@@ -1,6 +1,6 @@
 # Checklist de Veículos — Agrobiotech
 
-Sistema de checklist de veículos e limpeza interna, feito em Next.js + Firebase (Firestore).
+Sistema de checklist de veículos, feito em Next.js + Firebase (Firestore).
 
 ## Rodando localmente
 
@@ -14,9 +14,9 @@ Abra http://localhost:3000
 ## Estrutura
 
 - `app/page.js` — página principal, controla as abas e os dados do Firestore
-- `components/` — cada parte da tela (Novo checklist, Histórico, Veículos, Limpeza, modais)
+- `components/` — cada parte da tela (Novo checklist, Histórico, Veículos, modais)
 - `lib/firebase.js` — conexão com o Firestore (mesmo banco já usado antes)
-- `lib/constants.js` — listas de itens do checklist/limpeza e placas padrão
+- `lib/constants.js` — lista de itens do checklist e placas padrão
 - `public/images/` — logo e fotos dos veículos
 
 ## Banco de dados (Firestore)
@@ -24,7 +24,6 @@ Abra http://localhost:3000
 Continua sendo o mesmo projeto Firebase de antes (`checklist-agrobiotech`), com as coleções:
 
 - `checklists` — cada checklist de saída/retorno de veículo
-- `limpezas` — cada registro de limpeza interna
 - `config/placas` — lista de placas cadastradas
 
 Não precisa mexer em nada no Firebase — as regras do Firestore já estão publicadas.

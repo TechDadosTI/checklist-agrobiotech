@@ -6,7 +6,6 @@ const TABS = [
   { key: "novo", label: "Novo checklist" },
   { key: "historico", label: "Histórico" },
   { key: "veiculos", label: "Veículos" },
-  { key: "limpeza", label: "Limpeza" },
 ];
 
 export default function Header({ activeTab, onChangeTab }) {

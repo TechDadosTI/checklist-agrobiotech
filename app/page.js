@@ -17,7 +17,6 @@ import Toast from "@/components/Toast";
 import NovoChecklistTab from "@/components/NovoChecklistTab";
 import HistoricoTab from "@/components/HistoricoTab";
 import VeiculosTab from "@/components/VeiculosTab";
-import LimpezaTab from "@/components/LimpezaTab";
 import DetailModal from "@/components/DetailModal";
 import FinalizeModal from "@/components/FinalizeModal";
 import EditModal from "@/components/EditModal";
@@ -27,14 +26,13 @@ export default function Home() {
 
   const [plates, setPlates] = useState(DEFAULT_PLATES);
   const [checklists, setChecklists] = useState([]);
-  const [limpezas, setLimpezas] = useState([]);
 
   const [toastMsg, setToastMsg] = useState("");
   const [toastShow, setToastShow] = useState(false);
 
-  const [detail, setDetail] = useState(null); // { record, type, isConfirmation }
+  const [detail, setDetail] = useState(null); // { record, isConfirmation }
   const [finalizeRecord, setFinalizeRecord] = useState(null);
-  const [editState, setEditState] = useState(null); // { record, type }
+  const [editRecord, setEditRecord] = useState(null);
 
   const showToast = useCallback((msg) => {
     setToastMsg(msg);
@@ -70,25 +68,10 @@ export default function Home() {
     return () => unsub();
   }, []);
 
-  // ---------- Firestore: limpezas ----------
-  useEffect(() => {
-    const unsub = onSnapshot(
-      collection(db, "limpezas"),
-      (snapshot) => setLimpezas(snapshot.docs.map((d) => d.data())),
-      (err) => console.error("Erro no listener de limpezas:", err)
-    );
-    return () => unsub();
-  }, []);
-
   // ---------- Handlers ----------
   async function handleSaveChecklist(record) {
     await setDoc(doc(db, "checklists", record.id), record);
-    setDetail({ record, type: "checklist", isConfirmation: true });
-  }
-
-  async function handleSaveLimpeza(record) {
-    await setDoc(doc(db, "limpezas", record.id), record);
-    setDetail({ record, type: "limpeza", isConfirmation: true });
+    setDetail({ record, isConfirmation: true });
   }
 
   async function handleSavePlates(newPlates) {
@@ -101,14 +84,12 @@ export default function Home() {
   }
 
   async function handleEditSave(id, fields) {
-    const collectionName = editState.type === "checklist" ? "checklists" : "limpezas";
-    await updateDoc(doc(db, collectionName, id), fields);
+    await updateDoc(doc(db, "checklists", id), fields);
   }
 
-  async function handleDelete(id, type) {
-    const collectionName = type === "checklist" ? "checklists" : "limpezas";
+  async function handleDelete(id) {
     try {
-      await deleteDoc(doc(db, collectionName, id));
+      await deleteDoc(doc(db, "checklists", id));
       showToast("Registro apagado");
     } catch (e) {
       console.error(e);
@@ -128,10 +109,9 @@ export default function Home() {
         {activeTab === "historico" && (
           <HistoricoTab
             checklists={checklists}
-            limpezas={limpezas}
             plates={plates}
-            onOpenDetail={(record, type) => setDetail({ record, type, isConfirmation: false })}
-            onEdit={(record, type) => setEditState({ record, type })}
+            onOpenDetail={(record) => setDetail({ record, isConfirmation: false })}
+            onEdit={(record) => setEditRecord(record)}
             onFinalize={(record) => setFinalizeRecord(record)}
             onDelete={handleDelete}
           />
@@ -140,16 +120,11 @@ export default function Home() {
         {activeTab === "veiculos" && (
           <VeiculosTab plates={plates} onSavePlates={handleSavePlates} />
         )}
-
-        {activeTab === "limpeza" && (
-          <LimpezaTab plates={plates} onSave={handleSaveLimpeza} showToast={showToast} />
-        )}
       </main>
 
       {detail && (
         <DetailModal
           record={detail.record}
-          type={detail.type}
           isConfirmation={detail.isConfirmation}
           onClose={() => setDetail(null)}
         />
@@ -164,12 +139,11 @@ export default function Home() {
         />
       )}
 
-      {editState && (
+      {editRecord && (
         <EditModal
-          record={editState.record}
-          type={editState.type}
+          record={editRecord}
           plates={plates}
-          onClose={() => setEditState(null)}
+          onClose={() => setEditRecord(null)}
           onSave={handleEditSave}
           showToast={showToast}
         />
