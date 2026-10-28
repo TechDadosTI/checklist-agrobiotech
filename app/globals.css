@@ -293,3 +293,34 @@
     .stbadge{padding:0 5px;font-size:9px;}
     img{max-width:120px !important;max-height:60px !important;}
   }
+
+  /* ---------- Login ---------- */
+  .login-screen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:20px;background:var(--bg);
+  }
+  .login-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);max-width:360px;width:100%;text-align:center;overflow:hidden;
+  }
+  .login-logo-wrap{background:var(--green-deep);padding:26px 24px 20px;}
+  .login-body{padding:28px 24px 32px;}
+  .login-title{font-size:18px;font-weight:700;color:var(--green-deep);margin:0 0 8px;}
+  .login-sub{font-size:13px;color:var(--ink-soft);margin:0 0 20px;line-height:1.4;}
+  .login-error{
+    background:var(--nc-soft);color:var(--nc);border-radius:8px;padding:10px 12px;
+    font-size:12.5px;margin-bottom:16px;text-align:left;font-weight:600;
+  }
+  .login-field{text-align:left;margin-bottom:14px;}
+  .login-field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:5px;font-weight:600;}
+  .login-field input{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+    font-size:15px;background:#FAF8F1;color:var(--ink);font-family:inherit;
+  }
+  .login-field input:focus{outline:none;border-color:var(--green-mid);background:#fff;}
+  .logout-btn{
+    position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.16);color:#fff;
+    border:1px solid rgba(255,255,255,0.45);border-radius:8px;padding:6px 12px;
+    font-size:12px;font-weight:700;cursor:pointer;
+  }
+  .logout-btn:hover{background:rgba(255,255,255,0.28);}

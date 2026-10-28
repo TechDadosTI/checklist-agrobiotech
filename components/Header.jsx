@@ -9,8 +9,16 @@ const TABS = [
 ];
 
 export default function Header({ activeTab, onChangeTab }) {
+  async function handleLogout() {
+    await fetch("/api/logout", { method: "POST" });
+    window.location.href = "/login";
+  }
+
   return (
     <header className="top">
+      <button className="logout-btn" type="button" onClick={handleLogout}>
+        Sair
+      </button>
       <div className="brandrow">
         <Image
           className="brandmark"
