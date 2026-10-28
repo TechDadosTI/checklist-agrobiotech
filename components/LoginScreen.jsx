@@ -6,6 +6,7 @@ import Image from "next/image";
 export default function LoginScreen() {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -65,14 +66,29 @@ export default function LoginScreen() {
           </div>
           <div className="login-field">
             <label htmlFor="senha">Senha</label>
-            <input
-              id="senha"
-              type="password"
-              autoComplete="current-password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
+            <div className="login-pass">
+              <input
+                id="senha"
+                type={mostrarSenha ? "text" : "password"}
+                autoComplete="current-password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="login-eye"
+                onClick={() => setMostrarSenha((v) => !v)}
+                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                title={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                  {mostrarSenha && <line x1="3" y1="21" x2="21" y2="3" />}
+                </svg>
+              </button>
+            </div>
           </div>
 
           <button className="btn" type="submit" disabled={loading} style={{ width: "100%" }}>

@@ -318,6 +318,13 @@
     font-size:15px;background:#FAF8F1;color:var(--ink);font-family:inherit;
   }
   .login-field input:focus{outline:none;border-color:var(--green-mid);background:#fff;}
+  .login-pass{position:relative;}
+  .login-pass input{padding-right:44px;}
+  .login-eye{
+    position:absolute;top:0;right:0;height:100%;width:44px;background:none;border:none;
+    color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .login-eye:hover{color:var(--green-deep);}
   .logout-btn{
     position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.16);color:#fff;
     border:1px solid rgba(255,255,255,0.45);border-radius:8px;padding:6px 12px;
